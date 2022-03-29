@@ -1,0 +1,76 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CreateQuad : MonoBehaviour
+{
+
+    public Material material;
+
+    void Quad(Cubeside side) {
+
+        Mesh mesh = new Mesh();
+
+        //faces
+        Vector3[] vertices = VoxelData.getBySide(side)[0];
+        Vector3[] normals = VoxelData.getBySide(side)[1];
+
+        mesh.vertices = vertices;
+        mesh.normals = normals;
+        mesh.triangles = VoxelData.triangles;
+        mesh.uv = VoxelData.uv;
+
+        GameObject quad = new GameObject("quad");
+        quad.transform.parent = this.gameObject.transform;
+
+        MeshFilter mf = quad.AddComponent<MeshFilter>();
+        mf.mesh = mesh;
+    }
+
+    void CombineQuads() {
+
+        //1. Combine all children meshes
+        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        int i = 0;
+        while (i< meshFilters.Length) {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            i++;
+
+        }
+
+        //2. Create a new mesh on the parent object
+        MeshFilter mf = (MeshFilter)this.gameObject.AddComponent<MeshFilter>();
+        mf.mesh = new Mesh();
+
+        //3. Add combined meshes on children as the parent's mesh
+        mf.mesh.CombineMeshes(combine);
+
+        //4. Create a rendeder for the parent
+        MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
+        renderer.material = material;
+        
+        //5 Delete all uncombined children (anakin type beat)
+        foreach(Transform quad in this.transform)
+            Destroy(quad.gameObject);
+    }
+
+
+    void CreateCube() {
+        Quad(Cubeside.LEFT);
+        Quad(Cubeside.RIGHT);
+        Quad(Cubeside.BOTTOM);
+        Quad(Cubeside.TOP);
+        Quad(Cubeside.BACK);
+        Quad(Cubeside.FRONT);
+        CombineQuads();
+    }
+
+    void Start() {
+        CreateCube();
+
+    }
+}
+
+public enum Cubeside { BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK};
