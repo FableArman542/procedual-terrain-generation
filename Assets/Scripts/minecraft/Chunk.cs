@@ -32,8 +32,17 @@ public class Chunk {
                     int worldZ = (int) chunk.transform.position.z + z;
 
                     int h = Utils.GenerateHeight(worldX, worldZ);
-                    
-                    if (worldY == h)
+                    int hs = Utils.GeneratesStoneHeight(worldX, worldZ);
+
+
+
+                    if (worldY <= hs) {
+                        if (Utils.fBM3D(worldX, worldY, worldZ, 1, .5f) < .495f)
+                            chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
+                        else
+                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                    }
+                    else if (worldY == h)
                         chunkData[x, y, z] = new Block(BlockType.GRASS, pos, this, this.material);
                     else if (worldY < h)
                         chunkData[x, y, z] = new Block(BlockType.DIRT, pos, this, this.material);
@@ -55,6 +64,8 @@ public class Chunk {
         }
 
         CombineQuads();
+        MeshCollider collider = chunk.AddComponent<MeshCollider>();
+        collider.sharedMesh = chunk.GetComponent<MeshFilter>().mesh;
     }
     
     void CombineQuads() {

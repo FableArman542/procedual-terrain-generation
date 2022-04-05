@@ -7,7 +7,7 @@ public class World : MonoBehaviour {
     public Material material;
     public static int columnHeight = 4;
     public static int chunkSize = 16;
-    public static int worldSize = 2;
+    public static int worldSize = 10;
     public static Dictionary<string, Chunk> chunkDict;
 
     public static string CreateChunkName (Vector3 v) {
@@ -23,6 +23,7 @@ public class World : MonoBehaviour {
                     c.chunk.transform.parent = this.transform;
                     chunkDict.Add(c.chunk.name, c);
                 }
+                yield return null;
             }
         }
 
