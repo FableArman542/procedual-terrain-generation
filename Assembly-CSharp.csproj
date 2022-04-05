@@ -36,16 +36,29 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Chunk.cs" />
+     <Compile Include="Assets\Scripts\minecraft\Chunk.cs" />
      <Compile Include="Assets\Scripts\utils\BlockType.cs" />
-     <Compile Include="Assets\Scripts\utils\Cubeside.cs" />
-     <Compile Include="Assets\Scripts\Block.cs" />
-     <Compile Include="Assets\Scripts\World.cs" />
-     <Compile Include="Assets\Scripts\CreateQuad.cs" />
      <Compile Include="Assets\Scripts\utils\VoxelData.cs" />
+     <Compile Include="Assets\Scripts\utils\Cubeside.cs" />
+     <Compile Include="Assets\Scripts\tests\World0.cs" />
      <Compile Include="Assets\Scripts\utils\VoxelTextures.cs" />
-     <Compile Include="Assets\Scripts\World0.cs" />
-     <None Include="Assets\Scripts\asd.txt" />
+     <Compile Include="Assets\Scripts\minecraft\Block.cs" />
+     <Compile Include="Assets\Scripts\minecraft\World.cs" />
+     <Compile Include="Assets\Scripts\tests\CreateQuad.cs" />
+     <Compile Include="Assets\Grapher\SettingsWindow.cs" />
+     <Compile Include="Assets\Grapher\Example\DataProvider.cs" />
+     <Compile Include="Assets\Grapher\FileHandler.cs" />
+     <Compile Include="Assets\Grapher\GraphSettings.cs" />
+     <Compile Include="Assets\Grapher\Grapher.cs" />
+     <Compile Include="Assets\Grapher\Channel.cs" />
+     <Compile Include="Assets\Grapher\Grapher.Replay.cs" />
+     <Compile Include="Assets\Grapher\TimeKeeper.cs" />
+     <Compile Include="Assets\Grapher\Sample.cs" />
+     <Compile Include="Assets\Grapher\OpenInFileBrowser.cs" />
+     <Compile Include="Assets\Grapher\Grapher.Draw.cs" />
+     <Compile Include="Assets\Scripts\tests\PerlinTest.cs" />
+     <Compile Include="Assets\Scripts\utils\Utils.cs" />
+     <None Include="Assets\Grapher\IMPORTANT_README!.txt" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.30f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
