@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Chunk {
 
+    public enum ChunkStatus { DRAW, DONE };
+    public ChunkStatus status;
+
     public Material material;
     public Block[,,] chunkData;
     public GameObject chunk;
@@ -34,10 +37,10 @@ public class Chunk {
                     int h = Utils.GenerateHeight(worldX, worldZ);
                     int hs = Utils.GeneratesStoneHeight(worldX, worldZ);
 
-
+                    Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
 
                     if (worldY <= hs) {
-                        if (Utils.fBM3D(worldX, worldY, worldZ, 1, .5f) < .495f)
+                        if (Utils.fBM3D(worldX, worldY, worldZ, 1, .5f) < .7f)
                             chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
                         else
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
@@ -52,6 +55,7 @@ public class Chunk {
                 }
             }
         }
+        status = ChunkStatus.DRAW;
     }
 
     public void DrawChunk() {
@@ -66,6 +70,7 @@ public class Chunk {
         CombineQuads();
         MeshCollider collider = chunk.AddComponent<MeshCollider>();
         collider.sharedMesh = chunk.GetComponent<MeshFilter>().mesh;
+        status = ChunkStatus.DONE;
     }
     
     void CombineQuads() {
