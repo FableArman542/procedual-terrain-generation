@@ -39,11 +39,16 @@ public class Block {
             VoxelData.uv[3] = VoxelTextures.blockUVs[2, 1];
             VoxelData.uv[1] = VoxelTextures.blockUVs[2, 2];
             VoxelData.uv[0] = VoxelTextures.blockUVs[2, 3];
+        // }else if (bType == BlockType.GRASS && (side == Cubeside.LEFT || side == Cubeside.RIGHT || side == Cubeside.FRONT || side == Cubeside.BACK)) {
+        //     VoxelData.uv[2] = VoxelTextures.blockUVs[1, 0];
+        //     VoxelData.uv[3] = VoxelTextures.blockUVs[1, 1];
+        //     VoxelData.uv[1] = VoxelTextures.blockUVs[1, 2];
+        //     VoxelData.uv[0] = VoxelTextures.blockUVs[1, 3];
         } else {
-            VoxelData.uv[2] = VoxelTextures.blockUVs[(int)(bType + 1), 0];
-            VoxelData.uv[3] = VoxelTextures.blockUVs[(int)(bType + 1), 1];
-            VoxelData.uv[1] = VoxelTextures.blockUVs[(int)(bType + 1), 2];
-            VoxelData.uv[0] = VoxelTextures.blockUVs[(int)(bType + 1), 3];
+            VoxelData.uv[2] = VoxelTextures.blockUVs[(int)(bType), 0];
+            VoxelData.uv[3] = VoxelTextures.blockUVs[(int)(bType), 1];
+            VoxelData.uv[1] = VoxelTextures.blockUVs[(int)(bType), 2];
+            VoxelData.uv[0] = VoxelTextures.blockUVs[(int)(bType), 3];
         }
 
         mesh.vertices = vertices;
@@ -71,7 +76,7 @@ public class Block {
     bool HasSolidNeighbour(Vector3Int coordinates) {
         Block[,,] chunkData;
 
-        // Verificar se esta for do chunk
+        // Verificar se esta fora do chunk
         if (coordinates.x < 0 || coordinates.x >= World.chunkSize || 
             coordinates.y < 0 || coordinates.y >= World.chunkSize||
             coordinates.z < 0 || coordinates.z >= World.chunkSize) {

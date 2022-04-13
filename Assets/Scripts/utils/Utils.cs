@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Utils {
     
-    static float smooth = .002f;
-    static float smooth3D = 10 * smooth;
-    static int maxHeight = 150;
-    static int octaves = 6;
-    static float persistence = .7f;
+    public static float smooth = .002f;
+    public static float smooth3D = 10 * smooth;
+    public static int maxHeight = 150;
+    public static int octaves = 6;
+    public static float persistence = .7f;
     static float offset = 32000;
 
     public static int GeneratesStoneHeight(float x, float z) {
@@ -33,7 +33,7 @@ public class Utils {
         return ( xy + yx + xz + zx + yz + zy ) / 6;
     }
 
-    static float fBM (float x, float z, int octaves, float persistence) {
+    public static float fBM (float x, float z, int octaves, float persistence) {
         
         float total = 0;
         float amplitude = 1;

@@ -5,7 +5,10 @@ using UnityEngine;
 public class Chunk {
 
     public enum ChunkStatus { DRAW, DONE };
+    public enum Biome { NORMAL, DESERT };
     public ChunkStatus status;
+
+    public Biome b;
 
     public Material material;
     public Block[,,] chunkData;
@@ -18,6 +21,13 @@ public class Chunk {
         this.chunk.transform.position = pos;
         this.material = material;
         this.chunkSize = chunkSize;
+        
+        if ((pos.x + pos.z) % 100 < 3) {
+            b = Biome.DESERT;
+        } else {
+            b = Biome.NORMAL;
+        }
+        // Debug.Log("Posicao do "pos);
 
         BuildChunk();
     }
@@ -34,23 +44,43 @@ public class Chunk {
                     int worldY = (int) chunk.transform.position.y + y;
                     int worldZ = (int) chunk.transform.position.z + z;
 
-                    int h = Utils.GenerateHeight(worldX, worldZ);
-                    int hs = Utils.GeneratesStoneHeight(worldX, worldZ);
+                    
+                    if (b == Biome.NORMAL) {
+                        int h = Utils.GenerateHeight(worldX, worldZ);
+                        int hs = Utils.GeneratesStoneHeight(worldX, worldZ);
 
-                    Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
+                        Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
+                        Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
+                        Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
 
-                    if (worldY <= hs) {
-                        if (Utils.fBM3D(worldX, worldY, worldZ, 1, .5f) < .7f)
+
+                        if (worldY <= hs) { // Criar grutas
+                        if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
                             chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
                         else
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                        } else if (worldY == h)
+                            chunkData[x, y, z] = new Block(BlockType.GRASS, pos, this, this.material);
+                        else if (worldY < h)
+                            chunkData[x, y, z] = new Block(BlockType.DIRT, pos, this, this.material);
+                        else // Tudo o resto e ar
+                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                    } else if (b == Biome.DESERT) {
+                        int h = Utils.GenerateHeight(worldX, worldZ);
+
+                        Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
+                        Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
+                        Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
+                        
+                        if (worldY == h)
+                            chunkData[x, y, z] = new Block(BlockType.SAND, pos, this, this.material);
+                        else if (worldY < h)
+                            chunkData[x, y, z] = new Block(BlockType.SAND, pos, this, this.material);
+                        else // Tudo o resto e ar
+                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
                     }
-                    else if (worldY == h)
-                        chunkData[x, y, z] = new Block(BlockType.GRASS, pos, this, this.material);
-                    else if (worldY < h)
-                        chunkData[x, y, z] = new Block(BlockType.DIRT, pos, this, this.material);
-                    else
-                        chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+
+                    
                     
                 }
             }
