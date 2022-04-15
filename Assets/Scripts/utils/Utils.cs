@@ -17,6 +17,9 @@ public class Utils {
     public static int GenerateHeight(float x, float z) {
         return (int) Map(0, maxHeight, 0, 1, fBM(x*smooth, z*smooth, octaves, persistence));
     }
+    public static int GenerateHeight(float x, float z, float smooth, int octaves, float persistence) {
+        return (int) Map(0, maxHeight, 0, 1, fBM(x*smooth, z*smooth, octaves, persistence));
+    }
 
     static float Map(float newMin, float newMax, float oriMin, float oriMax, float val) {
         return Mathf.Lerp(newMin, newMax, Mathf.InverseLerp(oriMin, oriMax, val));

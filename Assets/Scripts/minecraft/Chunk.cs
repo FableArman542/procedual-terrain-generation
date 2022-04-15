@@ -22,14 +22,52 @@ public class Chunk {
         this.material = material;
         this.chunkSize = chunkSize;
         
-        if ((pos.x + pos.z) % 100 < 3) {
-            b = Biome.DESERT;
-        } else {
-            b = Biome.NORMAL;
-        }
-        // Debug.Log("Posicao do "pos);
+        // if ((pos.x + pos.z) % 100 < 3) {
+        //     b = Biome.DESERT;
+        // } else {
+        //     b = Biome.NORMAL;
+        // }
+        
+        b = GetBiome((int)pos.x, (int)pos.z, 2);
 
         BuildChunk();
+    }
+
+    Biome GetBiome (int x, int z, int size) {
+        
+        bool pertence_x = false;
+        List<int> xs = new List<int>();
+        List<int> negative = new List<int>();
+        int maxValue = (size-1) * 16;
+        int newMax = maxValue + ((size+1) * 16);
+        int counter = 2;
+
+        for (int i=0; i < size; ++i) {
+            int value = i*16;
+            if ((x-value)%newMax == 0) {
+                pertence_x = true;
+            }
+            if (i == 0) negative.Add(value - 16);
+            else {
+                negative.Add(value - (16 * counter));
+                ++ counter;
+            }
+            
+            xs.Add(i*16);
+        }
+
+        if (pertence_x) {
+            for (int i=0; i < size; ++i)
+                if ((z-xs[i])%newMax == 0)
+                    return Biome.DESERT;
+        } else {
+
+            for (int i=0; i < size; ++i)
+                if (z-negative[i]%newMax == 0)
+                    return Biome.DESERT;
+        }
+
+        return Biome.NORMAL;
     }
 
     void BuildChunk() {
@@ -66,11 +104,11 @@ public class Chunk {
                         else // Tudo o resto e ar
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
                     } else if (b == Biome.DESERT) {
-                        int h = Utils.GenerateHeight(worldX, worldZ);
+                        int h = Utils.GenerateHeight(worldX, worldZ, 0.001f, 3, 0.6f);
 
-                        Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
-                        Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
-                        Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
+                        // Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
+                        // Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
+                        // Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
                         
                         if (worldY == h)
                             chunkData[x, y, z] = new Block(BlockType.SAND, pos, this, this.material);
