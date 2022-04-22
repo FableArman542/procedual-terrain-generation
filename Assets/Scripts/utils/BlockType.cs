@@ -8,5 +8,6 @@ public enum BlockType {
     STONE = 3,
     SAND = 4,
     WOODEN_PLANK = 5,
+    TNT = 6,
     AIR = 0
 };

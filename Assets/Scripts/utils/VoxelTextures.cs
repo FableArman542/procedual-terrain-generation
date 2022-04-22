@@ -9,6 +9,9 @@ public static class VoxelTextures {
     private static readonly Vector2 stone_LBC = new Vector2(0f, 14f)/16;
     private static readonly Vector2 sand_LBC = new Vector2(0f, 4f)/16;
     private static readonly Vector2 woodenPlank_LBC = new Vector2(4f, 15f)/16;
+    private static readonly Vector2 tntSide_LBC = new Vector2(8f, 15f)/16;
+    private static readonly Vector2 tntTop_LBC = new Vector2(9f, 15f)/16;
+    private static readonly Vector2 tntBottom_LBC = new Vector2(10f, 15f)/16;
 
     private static readonly Vector2[] vectors = {
         new Vector2(1f, 0f)/16,
@@ -37,10 +40,22 @@ public static class VoxelTextures {
                             sand_LBC + vectors[0], 
                             sand_LBC + vectors[1], 
                             sand_LBC + vectors[2]},
-        /* Wood Planks */ { woodenPlank_LBC, 
+        /* Wood */ {        woodenPlank_LBC, 
                             woodenPlank_LBC + vectors[0], 
                             woodenPlank_LBC + vectors[1], 
-                            woodenPlank_LBC + vectors[2]}
+                            woodenPlank_LBC + vectors[2]},
+        /* TNT S */ {       tntSide_LBC,
+                            tntSide_LBC + vectors[0],
+                            tntSide_LBC + vectors[1],
+                            tntSide_LBC + vectors[2] },
+        /* TNT T */ {       tntTop_LBC,
+                            tntTop_LBC + vectors[0],
+                            tntTop_LBC + vectors[1],
+                            tntTop_LBC + vectors[2] },
+        /* TNT B */ {       tntBottom_LBC,
+                            tntBottom_LBC + vectors[0],
+                            tntBottom_LBC + vectors[1],
+                            tntBottom_LBC + vectors[2] }
     };
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Block {
 
-    BlockType bType;
+    public BlockType bType { get; set; }
     Material material;
     Chunk owner;
     Vector3 pos;
@@ -39,11 +39,24 @@ public class Block {
             VoxelData.uv[3] = VoxelTextures.blockUVs[2, 1];
             VoxelData.uv[1] = VoxelTextures.blockUVs[2, 2];
             VoxelData.uv[0] = VoxelTextures.blockUVs[2, 3];
-        // }else if (bType == BlockType.GRASS && (side == Cubeside.LEFT || side == Cubeside.RIGHT || side == Cubeside.FRONT || side == Cubeside.BACK)) {
-        //     VoxelData.uv[2] = VoxelTextures.blockUVs[1, 0];
-        //     VoxelData.uv[3] = VoxelTextures.blockUVs[1, 1];
-        //     VoxelData.uv[1] = VoxelTextures.blockUVs[1, 2];
-        //     VoxelData.uv[0] = VoxelTextures.blockUVs[1, 3];
+        } else if (bType == BlockType.TNT && side == Cubeside.BOTTOM) {
+            VoxelData.uv[2] = VoxelTextures.blockUVs[8, 0];
+            VoxelData.uv[3] = VoxelTextures.blockUVs[8, 1];
+            VoxelData.uv[1] = VoxelTextures.blockUVs[8, 2];
+            VoxelData.uv[0] = VoxelTextures.blockUVs[8, 3];
+        } else if (bType == BlockType.TNT && side == Cubeside.TOP) {
+            VoxelData.uv[2] = VoxelTextures.blockUVs[7, 0];
+            VoxelData.uv[3] = VoxelTextures.blockUVs[7, 1];
+            VoxelData.uv[1] = VoxelTextures.blockUVs[7, 2];
+            VoxelData.uv[0] = VoxelTextures.blockUVs[7, 3];
+        } else if (bType == BlockType.TNT &&    (   side == Cubeside.LEFT ||
+                                                    side == Cubeside.RIGHT ||
+                                                    side == Cubeside.FRONT ||
+                                                    side == Cubeside.BACK )) {
+            VoxelData.uv[2] = VoxelTextures.blockUVs[6, 0];
+            VoxelData.uv[3] = VoxelTextures.blockUVs[6, 1];
+            VoxelData.uv[1] = VoxelTextures.blockUVs[6, 2];
+            VoxelData.uv[0] = VoxelTextures.blockUVs[6, 3];
         } else {
             VoxelData.uv[2] = VoxelTextures.blockUVs[(int)(bType), 0];
             VoxelData.uv[3] = VoxelTextures.blockUVs[(int)(bType), 1];
@@ -119,6 +132,18 @@ public class Block {
         if (!HasSolidNeighbour(new Vector3Int((int)pos.x, (int)pos.y, (int)pos.z-1)))
             CreateQuad(Cubeside.BACK);
         if (!HasSolidNeighbour(new Vector3Int((int)pos.x, (int)pos.y, (int)pos.z+1)))
+            CreateQuad(Cubeside.FRONT);
+    }
+
+    public void DrawBlock() {
+
+        if (bType == BlockType.AIR) return;
+
+            CreateQuad(Cubeside.LEFT);
+            CreateQuad(Cubeside.RIGHT);
+            CreateQuad(Cubeside.BOTTOM);
+            CreateQuad(Cubeside.TOP);
+            CreateQuad(Cubeside.BACK);
             CreateQuad(Cubeside.FRONT);
     }
 }

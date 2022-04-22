@@ -39,8 +39,10 @@
      <Compile Include="Assets\Scripts\minecraft\Chunk.cs" />
      <Compile Include="Assets\Scripts\tests\PerlinTest.cs" />
      <Compile Include="Assets\Grapher\Sample.cs" />
+     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\NavigationMove.cs" />
      <Compile Include="Assets\Mini First Person Controller\Scripts\FirstPersonMovement.cs" />
      <Compile Include="Assets\Scripts\utils\Utils.cs" />
+     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\TransformExtensionMethods.cs" />
      <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Zoom.cs" />
      <Compile Include="Assets\Scripts\utils\BlockType.cs" />
      <Compile Include="Assets\Grapher\Grapher.Draw.cs" />
@@ -52,33 +54,54 @@
      <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\SimpleSampleCharacterControl.cs" />
      <Compile Include="Assets\Grapher\Grapher.cs" />
      <Compile Include="Assets\Mini First Person Controller\Scripts\FirstPersonLook.cs" />
+     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\CameraController.cs" />
      <Compile Include="Assets\Scripts\utils\VoxelData.cs" />
      <Compile Include="Assets\Grapher\Example\DataProvider.cs" />
      <Compile Include="Assets\Scripts\utils\Cubeside.cs" />
      <Compile Include="Assets\Scripts\tests\World0.cs" />
+     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\Vector3ExtensionMethods.cs" />
      <Compile Include="Assets\Scripts\utils\VoxelTextures.cs" />
      <Compile Include="Assets\Scripts\minecraft\Block.cs" />
      <Compile Include="Assets\Scripts\minecraft\World.cs" />
      <Compile Include="Assets\Scripts\tests\CreateQuad.cs" />
      <Compile Include="Assets\Grapher\SettingsWindow.cs" />
+     <Compile Include="Assets\Scripts\CursorVisibility.cs" />
      <Compile Include="Assets\Grapher\GraphSettings.cs" />
      <Compile Include="Assets\Grapher\Grapher.Replay.cs" />
      <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Crouch.cs" />
+     <Compile Include="Assets\Scripts\minecraft\DetectBlock.cs" />
      <Compile Include="Assets\Grapher\TimeKeeper.cs" />
      <Compile Include="Assets\Grapher\OpenInFileBrowser.cs" />
+     <Compile Include="Assets\Scripts\minecraft\ChunkGameObject.cs" />
      <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
      <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
-     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\NavigationMove.cs" />
-     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\TransformExtensionMethods.cs" />
-     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\CameraController.cs" />
-     <Compile Include="Assets\Third Person Camera Controller Pro for RPGs\Vector3ExtensionMethods.cs" />
-     <Compile Include="Assets\Scripts\CursorVisibility.cs" />
      <None Include="Assets\Grapher\IMPORTANT_README!.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
      <None Include="Assets\Supercyan Character Pack Free Sample\Shaders\Legacy\CelShader.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <None Include="Assets\Supercyan Character Pack Free Sample\Shaders\SupercyanShader.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
      <None Include="Assets\Third Person Camera Controller Pro for RPGs\README.txt" />
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\Third Person Camera Controller Pro for RPGs\LICENSE.txt" />
      <None Include="Assets\Supercyan Character Pack Free Sample\Shaders\SupercyanShaderLighting.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.30f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -646,8 +669,14 @@
     <Reference Include="System.Xml.Serialization">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.30f1\Editor\Data\NetStandard\compat\2.0.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+        <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
         <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+        <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
         <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
@@ -681,12 +710,6 @@
     </Reference>
     <Reference Include="Unity.Mathematics">
         <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-        <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-        <HintPath>C:\Users\arman\ProcedualGeneration\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -5,15 +5,12 @@ using UnityEngine;
 public class Chunk {
 
     public enum ChunkStatus { DRAW, DONE };
-    public enum Biome { NORMAL, DESERT };
+    public enum Biome { NORMAL, DESERT, ROCKY };
     public ChunkStatus status;
-
     public Biome b;
-
     public Material material;
     public Block[,,] chunkData;
     public GameObject chunk;
-
     private int chunkSize;
 
     public Chunk(Vector3 pos, Material material, int chunkSize) {
@@ -21,23 +18,55 @@ public class Chunk {
         this.chunk.transform.position = pos;
         this.material = material;
         this.chunkSize = chunkSize;
-        
-        // if ((pos.x + pos.z) % 100 < 3) {
-        //     b = Biome.DESERT;
-        // } else {
-        //     b = Biome.NORMAL;
-        // }
-        
-        b = GetBiome((int)pos.x, (int)pos.z, 2);
+
+        b = GetBiome((int)pos.x, (int)pos.z, 5);
 
         BuildChunk();
+    }
+
+    Vector3Int TransformToLocalPosition(Vector3Int old_pos) {
+        return Vector3Int.FloorToInt(chunk.transform.InverseTransformPoint(old_pos));
+    }
+
+    private bool PointInChunk (Vector3Int localPosition) {
+        return (localPosition.x >= 0 && localPosition.x < chunkSize) &&
+            (localPosition.y >= 0 && localPosition.y < chunkSize) &&
+            (localPosition.z >= 0 && localPosition.z < chunkSize) &&
+            (chunkData[localPosition.x, localPosition.y, localPosition.z] != null);
+    }
+
+    public BlockType GetBlockType(Vector3Int position) {
+        Vector3Int localPosition = TransformToLocalPosition(position);
+        if (PointInChunk(localPosition))
+            return chunkData[localPosition.x, localPosition.y, localPosition.z].bType;
+            
+        return BlockType.AIR;
+    }
+
+    public void RemoveBlock(Vector3Int position) {
+        Vector3Int localPosition = TransformToLocalPosition(position);
+        if (PointInChunk(localPosition))
+            chunkData[localPosition.x, localPosition.y, localPosition.z].bType = BlockType.AIR;
+        status = ChunkStatus.DRAW;
+    }
+
+    public void PlaceBlock(Vector3Int position, BlockType blockType) {
+
+        Vector3Int localPosition = TransformToLocalPosition(position);
+        if (PointInChunk(localPosition)) {
+            chunkData[localPosition.x, localPosition.y, localPosition.z].bType = blockType;
+            status = ChunkStatus.DRAW;
+        }
+        
     }
 
     Biome GetBiome (int x, int z, int size) {
         
         bool pertence_x = false;
+        
         List<int> xs = new List<int>();
         List<int> negative = new List<int>();
+
         int maxValue = (size-1) * 16;
         int newMax = maxValue + ((size+1) * 16);
         int counter = 2;
@@ -59,12 +88,12 @@ public class Chunk {
         if (pertence_x) {
             for (int i=0; i < size; ++i)
                 if ((z-xs[i])%newMax == 0)
-                    return Biome.DESERT;
+                    return (Random.Range(0f, 1f) < .7f) ? Biome.DESERT : Biome.ROCKY;
         } else {
 
             for (int i=0; i < size; ++i)
                 if (z-negative[i]%newMax == 0)
-                    return Biome.DESERT;
+                    return (Random.Range(0f, 1f) < .7f) ? Biome.DESERT : Biome.ROCKY;
         }
 
         return Biome.NORMAL;
@@ -82,39 +111,57 @@ public class Chunk {
                     int worldY = (int) chunk.transform.position.y + y;
                     int worldZ = (int) chunk.transform.position.z + z;
 
+                    int h = Utils.GenerateHeight(worldX, worldZ);
+                    int hs = Utils.GeneratesStoneHeight(worldX, worldZ);
                     
                     if (b == Biome.NORMAL) {
-                        int h = Utils.GenerateHeight(worldX, worldZ);
-                        int hs = Utils.GeneratesStoneHeight(worldX, worldZ);
-
-                        Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
-                        Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
-                        Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
-
-
-                        if (worldY <= hs) { // Criar grutas
-                        if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
-                            chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
-                        else
-                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
-                        } else if (worldY == h)
-                            chunkData[x, y, z] = new Block(BlockType.GRASS, pos, this, this.material);
-                        else if (worldY < h)
-                            chunkData[x, y, z] = new Block(BlockType.DIRT, pos, this, this.material);
-                        else // Tudo o resto e ar
-                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
-                    } else if (b == Biome.DESERT) {
-                        int h = Utils.GenerateHeight(worldX, worldZ, 0.001f, 3, 0.6f);
 
                         // Grapher.Log(Utils.fBM3D(worldX, worldY, worldZ, 1, .5f), "noise3D", Color.yellow);
                         // Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
                         // Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
-                        
-                        if (worldY == h)
-                            chunkData[x, y, z] = new Block(BlockType.SAND, pos, this, this.material);
+
+                        if (worldY > h + 30) {
+                            if (Utils.fBM3D(worldX, worldY, worldZ, 1, .006f) > .60f)
+                                chunkData[x, y, z] = new Block(BlockType.WOODEN_PLANK, pos, this, this.material);
+                            else
+                                chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                        } else if (worldY <= hs) { // Criar grutas
+                            if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
+                                chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
+                            else
+                                chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                        } else if (worldY == h)
+                            chunkData[x, y, z] = new Block(BlockType.GRASS, pos, this, this.material);
                         else if (worldY < h)
+                            chunkData[x, y, z] = new Block(BlockType.DIRT, pos, this, this.material);
+                        else
+                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+
+                    } else if (b == Biome.DESERT) {
+                        int newHeight = Utils.GenerateHeight(worldX, worldZ, 0.001f, Utils.octaves, Utils.persistence);
+                        int calculatedHeight = (int)((newHeight + h)/2);
+                        
+                        if (worldY <= hs) { // Criar grutas
+                            if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
+                                chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
+                            else
+                                chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                        } else if (worldY < calculatedHeight || worldY == calculatedHeight)
                             chunkData[x, y, z] = new Block(BlockType.SAND, pos, this, this.material);
-                        else // Tudo o resto e ar
+                        else
+                            chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                    } else if (b == Biome.ROCKY) {
+
+                        if (worldY <= hs) { // Criar grutas
+                            if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
+                                chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
+                            else
+                                chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                        } else if (worldY == h || worldY < h)
+                            chunkData[x, y, z] = new Block((Random.Range(0f, 1f) > .3f ? BlockType.STONE : BlockType.DIRT), pos, this, this.material);
+                        else if (worldY < h)
+                            chunkData[x, y, z] = new Block(BlockType.DIRT, pos, this, this.material);
+                        else
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
                     }
 
@@ -152,17 +199,34 @@ public class Chunk {
             combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             i++;
         }
-
+        
         //2. Create a new mesh on the parent object
-        MeshFilter mf = (MeshFilter)this.chunk.AddComponent<MeshFilter>();
+        MeshFilter mf = null;
+        if (this.chunk.GetComponent<MeshFilter>() != null) {
+            mf = this.chunk.GetComponent<MeshFilter>();
+        } else {
+            mf = (MeshFilter)this.chunk.AddComponent<MeshFilter>();
+        }
+        
         mf.mesh = new Mesh();
 
         //3. Add combined meshes on children as the parent's mesh
         mf.mesh.CombineMeshes(combine);
 
         //4. Create a rendeder for the parent
-        MeshRenderer renderer = this.chunk.AddComponent<MeshRenderer>();
+        MeshRenderer renderer;
+        if (this.chunk.GetComponent<MeshRenderer>() != null) {
+            renderer = this.chunk.GetComponent<MeshRenderer>();
+        } else {
+            renderer = this.chunk.AddComponent<MeshRenderer>();
+        }
+
         renderer.material = material;
+
+        ChunkGameObject chunkGameObject = this.chunk.AddComponent<ChunkGameObject>();
+        chunkGameObject.chunkData = chunkData;
+        chunkGameObject.chunk = this;
+
         
         //5 Delete all uncombined children
         foreach(Transform quad in this.chunk.transform)

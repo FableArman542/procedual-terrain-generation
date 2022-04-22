@@ -83,7 +83,7 @@ public class World : MonoBehaviour {
         drawing = false;
     }
 
-    void Drawing() { StartCoroutine(DrawChunks()); }
+    public void Drawing() { StartCoroutine(DrawChunks()); }
 
     void Building(Vector3 chunkPos, int rad) { StartCoroutine(BuildRecursiveWorld(chunkPos, rad)); }
 
@@ -103,7 +103,7 @@ public class World : MonoBehaviour {
         this.transform.rotation = Quaternion.identity;
 
         Vector3 ppos = player.transform.position;
-        player.transform.position = new Vector3(ppos.x, Utils.GenerateHeight(ppos.x, ppos.z), ppos.z);
+        player.transform.position = new Vector3(ppos.x, Utils.GenerateHeight(ppos.x, ppos.z)+20, ppos.z);
 
         lastBuildPosition = player.transform.position;
 
@@ -120,10 +120,6 @@ public class World : MonoBehaviour {
             Drawing();
         }
         if (!drawing) Drawing();
-
-        // if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
-        //     Grapher.Log(Utils.fBM(player.transform.position.x, 1, 3, .99f), "Biome", Color.green);
-        // }
     }
     
 }
