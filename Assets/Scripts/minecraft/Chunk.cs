@@ -120,12 +120,13 @@ public class Chunk {
                         // Grapher.Log( Utils.fBM(worldX * 2 * Utils.smooth, worldZ * 2 * Utils.smooth, Utils.octaves - 1, 1.2f*Utils.persistence), "Stone height", Color.green);
                         // Grapher.Log( Utils.fBM(worldX * Utils.smooth, worldZ * Utils.smooth, Utils.octaves, Utils.persistence), "Normal height", Color.red);
 
-                        if (worldY > h + 30) {
-                            if (Utils.fBM3D(worldX, worldY, worldZ, 1, .006f) > .60f)
-                                chunkData[x, y, z] = new Block(BlockType.WOODEN_PLANK, pos, this, this.material);
-                            else
-                                chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
-                        } else if (worldY <= hs) { // Criar grutas
+                        // if (worldY > h + 30) {
+                        //     if (Utils.fBM3D(worldX, worldY, worldZ, 1, .006f) > .60f)
+                        //         chunkData[x, y, z] = new Block(BlockType.WOODEN_PLANK, pos, this, this.material);
+                        //     else
+                        //         chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
+                        // } else 
+                        if (worldY <= hs) { // Criar grutas
                             if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
                                 chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
                             else
@@ -138,7 +139,7 @@ public class Chunk {
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
 
                     } else if (b == Biome.DESERT) {
-                        int newHeight = Utils.GenerateHeight(worldX, worldZ, 0.001f, Utils.octaves, Utils.persistence);
+                        int newHeight = Utils.GenerateHeight(worldX, worldZ, 0.0001f, Utils.octaves, Utils.persistence);
                         int calculatedHeight = (int)((newHeight + h)/2);
                         
                         if (worldY <= hs) { // Criar grutas
@@ -151,7 +152,9 @@ public class Chunk {
                         else
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
                     } else if (b == Biome.ROCKY) {
-
+                        int newHeight = Utils.GenerateHeight(worldX, worldZ, 0.004f, Utils.octaves, Utils.persistence);
+                        h = (int)((newHeight + h)/2);
+                        
                         if (worldY <= hs) { // Criar grutas
                             if (Utils.fBM3D(worldX, worldY, worldZ, 1, .6f) < .7f)
                                 chunkData[x, y, z] = new Block(BlockType.STONE, pos, this, this.material);
@@ -164,8 +167,6 @@ public class Chunk {
                         else
                             chunkData[x, y, z] = new Block(BlockType.AIR, pos, this, this.material);
                     }
-
-                    
                     
                 }
             }
@@ -195,9 +196,11 @@ public class Chunk {
         CombineInstance[] combine = new CombineInstance[meshFilters.Length];
         int i = 0;
         while (i< meshFilters.Length) {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            i++;
+            if (!meshFilters[i].CompareTag("RealChunk")) {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            }
+            i ++;
         }
         
         //2. Create a new mesh on the parent object
@@ -212,6 +215,7 @@ public class Chunk {
 
         //3. Add combined meshes on children as the parent's mesh
         mf.mesh.CombineMeshes(combine);
+        mf.tag = "RealChunk";
 
         //4. Create a rendeder for the parent
         MeshRenderer renderer;

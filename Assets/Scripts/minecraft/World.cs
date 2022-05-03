@@ -31,17 +31,22 @@ public class World : MonoBehaviour {
 
         if (--rad < 0) yield break;
 
-        Building(new Vector3(x, y, z+chunkSize), rad-1);
+        Building(new Vector3(x, y, z + chunkSize), rad-1);
         yield return null;
-        Building(new Vector3(x, y, z-chunkSize), rad-1);
+
+        Building(new Vector3(x, y, z - chunkSize), rad-1);
         yield return null;
-        Building(new Vector3(x, y+chunkSize, z), rad-1);
+
+        Building(new Vector3(x, y + chunkSize, z), rad-1);
         yield return null;
-        Building(new Vector3(x, y-chunkSize, z+chunkSize), rad-1);
+        
+        Building(new Vector3(x, y - chunkSize, z), rad-1);
         yield return null;
-        Building(new Vector3(x+chunkSize, y, z), rad-1);
+        
+        Building(new Vector3(x + chunkSize, y, z), rad-1);
         yield return null;
-        Building(new Vector3(x-chunkSize, y, z), rad-1);
+        
+        Building(new Vector3(x - chunkSize, y, z), rad-1);
     }
 
     void BuildChunkAt(Vector3 chunkPos) {

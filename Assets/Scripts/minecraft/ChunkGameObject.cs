@@ -43,7 +43,7 @@ public class ChunkGameObject : MonoBehaviour {
     }
 
     public void PlaceBlock(Vector3 pos, BlockType blockType) {
-        Vector3Int blockPos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y)+1, Mathf.FloorToInt(pos.z));
+        Vector3Int blockPos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
 
         chunk.PlaceBlock(blockPos, blockType);
         world.Drawing();
@@ -51,7 +51,7 @@ public class ChunkGameObject : MonoBehaviour {
     }
 
     public void HighLightBlock(Vector3 pos, GameObject highlight) {
-        Vector3Int blockPos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y + 1), Mathf.FloorToInt(pos.z));
+        Vector3Int blockPos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
 
         highlight.SetActive(true);
         highlight.transform.position = blockPos;

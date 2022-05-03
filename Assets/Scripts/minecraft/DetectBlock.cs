@@ -42,7 +42,9 @@ public class DetectBlock : MonoBehaviour {
 
         if (Physics.Raycast(ray, out hit)) {
             
-            Vector3 point = hit.point;
+            Vector3 old_point = hit.point;
+            Vector3 normal = hit.normal;
+            Vector3 point = old_point + normal;
             Transform objectHit = hit.transform;
             Debug.Log(objectHit.name);
 
@@ -55,7 +57,7 @@ public class DetectBlock : MonoBehaviour {
                     chunk.RemoveBlock(point);
                 }
 
-                string text = chunk.GetBlockType(point);
+                string text = chunk.GetBlockType(old_point);
                 castedBlockText.text = (text != null) ? text : "";
                 selectedBlockText.text = "Selected Block: " + chunk.BlockTypeToString(blockTypes[selectedIndex]);
 
